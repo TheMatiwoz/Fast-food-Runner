@@ -25,7 +25,8 @@
         android:background="@drawable/bg"
         android:text="KFC"
         android:textColor="#FFFFFF"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:onClick="start"/>
 
     <Button
         android:id="@+id/mcdonal"
