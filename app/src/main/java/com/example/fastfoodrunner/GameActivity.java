@@ -36,7 +36,7 @@ public class GameActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
 
-        game = new Game(this); //, point.x, point.y);
+        game = new Game(this);
         setContentView(game);
 
 
