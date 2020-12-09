@@ -22,7 +22,7 @@ class Game extends SurfaceView implements Runnable {
     private final Paint paint;
     private  HealthyFood healthyFood, healthyFood2, healthyFood3;
     private boolean firstClick = true;
-    ArrayList<HealthyFood> healthyFoods = new ArrayList<>();
+     private ArrayList<HealthyFood> healthyFoods = new ArrayList<>();
 
 
     //TO Do
@@ -46,15 +46,10 @@ class Game extends SurfaceView implements Runnable {
         healthyFoods.add(healthyFood);
         healthyFoods.add(healthyFood2);
         healthyFoods.add(healthyFood3);
-        int q = 3;
+
         for (HealthyFood i:healthyFoods) {
             i.x =  (int) Game.getScreenWidth() + 500;
-            q+=4;
         }
-
-
-        //healthyFood.x =(int) Game.getScreenWidth() * 3;
-        //healthyFood.y =(int) Game.getScreenHeight() / 2 + 200;
 
         paint = new Paint();
 
@@ -92,13 +87,11 @@ class Game extends SurfaceView implements Runnable {
 
     private void update(){
         //System.out.println(healthyFood.x);
-
-
-
-        backgroundChange();
-        jump();
-        //healthyFood.healthyFoodChange();
-        healthyFood.x -= 10;
+        background1.backgroundChange();
+        background2.backgroundChange();
+        runner.jump();
+        healthyFood.healthyFoodChange();
+        //healthyFood.x -= 10;
         //int q = 1;
         for (HealthyFood i:healthyFoods) {
             if(i.x + i.width < 0){
@@ -157,46 +150,7 @@ class Game extends SurfaceView implements Runnable {
         }
         return true;
     }
-    // do runnera
-    private void jump(){
 
-        if(!runner.isGoingUp){
-            runner.downVelocity += runner.gravityDown;
-            runner.yPosition += runner.downVelocity;
-        }
-
-
-        if(runner.yPosition > ((Game.getScreenHeight() / 2) + 100)){
-            runner.yPosition = ((Game.getScreenHeight() / 2) + 100);
-            runner.downVelocity =0;
-        }
-
-        if(runner.isGoingUp){
-
-            runner.upVelocity -= runner.gravityUp;
-            runner.yPosition -= runner.upVelocity;
-
-        }
-        if(runner.upVelocity <= 0){
-            runner.isGoingUp = false;
-            runner.upVelocity = runner.UPVELOCITY;
-        }
-    }
-
-    // do bacground
-    private void backgroundChange(){
-        background1.x -= 10;
-        background2.x -= 10;
-        System.out.println(background2.x);
-
-        if(background1.x + getScreenWidth() < 0){
-            background1.x = getScreenWidth();
-        }
-
-        if(background2.x + getScreenWidth() < 0){
-            background2.x = getScreenWidth();
-        }
-    }
 
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;

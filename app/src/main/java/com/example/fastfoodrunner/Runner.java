@@ -41,6 +41,31 @@ class Runner {
 
     }
 
+    public void jump(){
+
+        if(!isGoingUp){
+            downVelocity += gravityDown;
+            yPosition += downVelocity;
+        }
+
+
+        if(yPosition > ((Game.getScreenHeight() / 2) + 100)){
+            yPosition = ((Game.getScreenHeight() / 2) + 100);
+            downVelocity = 0;
+        }
+
+        if(isGoingUp){
+
+            upVelocity -= gravityUp;
+            yPosition -= upVelocity;
+
+        }
+        if(upVelocity <= 0){
+            isGoingUp = false;
+            upVelocity = UPVELOCITY;
+        }
+    }
+
 
 
 }

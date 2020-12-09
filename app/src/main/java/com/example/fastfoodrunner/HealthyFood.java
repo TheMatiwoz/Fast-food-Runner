@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 
 class HealthyFood {
     public int x = 0 ;
-    int y = (int) Game.getScreenHeight() / 2 + 200;
+    int y = Game.getScreenHeight() / 2 + 200;
     int width;
     int height;
     Bitmap healthyFood;
@@ -14,8 +14,8 @@ class HealthyFood {
     HealthyFood(Resources resources){
 
         healthyFood = BitmapFactory.decodeResource(resources, R.drawable.broccoli);
-        width =(int) Game.getScreenWidth() / 6;
-        height =(int) Game.getScreenHeight() / 6;
+        width = Game.getScreenWidth() / 6;
+        height = Game.getScreenHeight() / 6;
         healthyFood = Bitmap.createScaledBitmap(healthyFood, width, height, false);
 
     }

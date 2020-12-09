@@ -16,4 +16,12 @@ class Background {
         background = Bitmap.createScaledBitmap(background, screenX, screenY, false);
 
     }
+
+    public void backgroundChange(){
+        x -= 10;
+
+        if(x + Game.getScreenWidth() < 0){
+            x = Game.getScreenWidth();
+        }
+    }
 }
