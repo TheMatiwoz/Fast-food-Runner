@@ -9,10 +9,15 @@ class Runner {
     Bitmap[] runner;
     int xPosition;
     int yPosition;
-    int width;
-    int height;
-    int frameNumber = 0;
+    private int width;
+    private int height;
     boolean isGoingUp = false;
+    public final float UPVELOCITY = 60;  // Manipulate to change height
+    float downVelocity = 0, upVelocity = UPVELOCITY;
+    float gravityUp = 4;
+    float gravityDown = 0.5f;
+    int frameNum =0;
+    int delayRunnerMove = 0;
 
 
     Runner(Resources resources){
