@@ -15,6 +15,7 @@ public class GameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         game.pause();
+        finish();
     }
 
     @Override

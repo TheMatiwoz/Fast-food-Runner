@@ -3,21 +3,25 @@ package com.example.fastfoodrunner;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
+
+import androidx.constraintlayout.solver.widgets.Rectangle;
 
 class Runner {
 
     Bitmap[] runner;
     int xPosition;
     int yPosition;
-    private int width;
-    private int height;
+    public int width;
+    public int height;
     boolean isGoingUp = false;
-    public final float UPVELOCITY = 60;  // Manipulate to change height
+    public final float UPVELOCITY = 62;  // Manipulate to change height
     float downVelocity = 0, upVelocity = UPVELOCITY;
     float gravityUp = 4;
-    float gravityDown = 0.5f;
+    float gravityDown = 0.4f;
     int frameNum =0;
     int delayRunnerMove = 0;
+    Rect runnerRectangle;
 
 
     Runner(Resources resources){
@@ -37,6 +41,7 @@ class Runner {
 
         xPosition = Game.getScreenWidth() / 10;
         yPosition = (Game.getScreenHeight() / 2) + 100;
+
 
 
     }
@@ -63,6 +68,27 @@ class Runner {
         if(upVelocity <= 0){
             isGoingUp = false;
             upVelocity = UPVELOCITY;
+        }
+    }
+
+    public void updateRectPosition(){
+
+        runnerRectangle = new Rect(xPosition, yPosition - height, xPosition + width, yPosition);
+    }
+
+    public void delayMove(){
+        // Change runner frame method
+        if(delayRunnerMove < 8){
+            delayRunnerMove++;
+        }
+        else{
+            delayRunnerMove = 0;
+            if (frameNum < 4) {
+                frameNum++;
+            }
+            else{
+                frameNum = 0;
+            }
         }
     }
 
