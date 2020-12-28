@@ -18,7 +18,7 @@ class Background {
     }
 
     public void backgroundChange(){
-        x -= 10;
+        x -= 15;
 
         if(x + Game.getScreenWidth() < 0){
             x = Game.getScreenWidth();

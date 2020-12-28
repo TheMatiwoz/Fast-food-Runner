@@ -15,10 +15,10 @@ class Runner {
     public int width;
     public int height;
     boolean isGoingUp = false;
-    public final float UPVELOCITY = 62;  // Manipulate to change height
+    public final float UPVELOCITY = 45;  // Manipulate to change height
     float downVelocity = 0, upVelocity = UPVELOCITY;
-    float gravityUp = 4;
-    float gravityDown = 0.4f;
+    float gravityUp = 2.5f;
+    float gravityDown = 1.4f;
     int frameNum =0;
     int delayRunnerMove = 0;
     Rect runnerRectangle;

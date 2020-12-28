@@ -9,7 +9,7 @@ class JunkyFood {
     public int x = Game.getScreenWidth() + 700*4;
     public boolean isCollision = false;
     public boolean firstCollision = true;
-    int y = Game.getScreenHeight() / 2 + 160;
+    int y = Game.getScreenHeight() / 2 + 240;
     int width;
     int height;
     Bitmap junkyFood;
@@ -18,8 +18,8 @@ class JunkyFood {
     JunkyFood(Resources resources){
 
         junkyFood = BitmapFactory.decodeResource(resources, R.drawable.kfcbox);
-        width = Game.getScreenWidth() / 8;
-        height = Game.getScreenHeight() / 5;
+        width = Game.getScreenWidth() / 10;
+        height = Game.getScreenHeight() / 7;
         junkyFood = Bitmap.createScaledBitmap(junkyFood, width, height, false);
 
 
@@ -27,7 +27,7 @@ class JunkyFood {
 
     public void junkyFoodChange(){
 
-        x -= 10;
+        x -= 15;
     }
 
     public void updateRectPosition(){

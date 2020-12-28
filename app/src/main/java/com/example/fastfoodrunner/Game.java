@@ -2,6 +2,7 @@ package com.example.fastfoodrunner;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -18,7 +19,10 @@ import androidx.constraintlayout.solver.widgets.Rectangle;
 
 class Game extends SurfaceView implements Runnable {
 
-    private final JunkyFood junkyFood;
+    private final JunkyFood junkyFood1;
+    private final JunkyFood junkyFood2;
+    private final JunkyFood junkyFood3;
+    private ArrayList<JunkyFood> junkyFood = new ArrayList<>();
     private Thread thread;
     private boolean isPlaying;
     private final Background background1;
@@ -31,9 +35,12 @@ class Game extends SurfaceView implements Runnable {
     private ArrayList<Hearts> hearts = new ArrayList<>();
     private boolean firstClick = true;
     private ArrayList<HealthyFood> healthyFoods = new ArrayList<>();
-    private int xpos = 2;
+    private int junkyFoodxpos = 2;
+    private int healthyFoodXPos = 2;
     private Random rand = new Random();
     private int minusHeart = 0;
+
+    private GameActivity activity;
 
 
     //TO Do
@@ -41,8 +48,9 @@ class Game extends SurfaceView implements Runnable {
     // Improve jumping
 
 
-    public Game(Context context){
-        super(context);
+    public Game(GameActivity activity){
+        super(activity);
+        this.activity = activity;
 
 
         background1 = new Background(getScreenWidth(), getScreenHeight(), getResources());
@@ -61,18 +69,30 @@ class Game extends SurfaceView implements Runnable {
         runner = new Runner(getResources());
         healthyFood = new HealthyFood(getResources());
         healthyFood2 = new HealthyFood(getResources());
-        //healthyFood3 = new HealthyFood(getResources());
+        healthyFood3 = new HealthyFood(getResources());
         healthyFoods.add(healthyFood);
         healthyFoods.add(healthyFood2);
-        //healthyFoods.add(healthyFood3);
+        healthyFoods.add(healthyFood3);
 
-        junkyFood = new JunkyFood(getResources());
+        junkyFood1 = new JunkyFood(getResources());
+        junkyFood2 = new JunkyFood(getResources());
+        junkyFood3 = new JunkyFood(getResources());
+
+        junkyFood.add(junkyFood1);
+        junkyFood.add(junkyFood2);
+        junkyFood.add(junkyFood3);
+
 
         score = new HighScore();
 
         for (HealthyFood i:healthyFoods) {
-            i.x =  Game.getScreenWidth() + 700*xpos;
-            xpos ++;
+            i.x =  Game.getScreenWidth() + 700*healthyFoodXPos;
+            healthyFoodXPos ++;
+        }
+
+        for (JunkyFood i:junkyFood) {
+            i.x =  Game.getScreenWidth() + 900*junkyFoodxpos;
+            junkyFoodxpos ++;
         }
 
         paint = new Paint();
@@ -116,28 +136,32 @@ class Game extends SurfaceView implements Runnable {
         background1.backgroundChange();
         background2.backgroundChange();
         runner.jump();
-        for(HealthyFood he:healthyFoods){
-            he.healthyFoodChange();
-            if(he.x + he.width < 0){
-                he.x = Game.getScreenWidth();
-                he.isCollision = false;
-                he.firstCollision = true;
-
-            }
-            he.updateRectPosition();
-        }
+        defaultHealthyFoodPosition();
+//        for(HealthyFood he:healthyFoods){
+//            he.healthyFoodChange();
+//            if(he.x + he.width < 0){
+//                he.x = Game.getScreenWidth();
+//                he.isCollision = false;
+//                he.firstCollision = true;
+//
+//            }
+//            he.updateRectPosition();
+//        }
 
 
         runner.updateRectPosition();
+        defaultJunkyFoodPosition();
 
+//        for(JunkyFood i : junkyFood){
+//            i.junkyFoodChange();
+//            if(i.x + i.width < 0){
+//                i.x = getScreenWidth();
+//                i.isCollision = false;
+//                i.firstCollision = true;
+//            }
+//            i.updateRectPosition();
+//        }
 
-        junkyFood.junkyFoodChange();
-        if(junkyFood.x + junkyFood.width < 0){
-            junkyFood.x = getScreenWidth();
-            junkyFood.isCollision = false;
-            junkyFood.firstCollision = true;
-        }
-        junkyFood.updateRectPosition();
 
 
         runner.delayMove();
@@ -147,25 +171,24 @@ class Game extends SurfaceView implements Runnable {
 
     private void draw(){
 
-
-
-
-
         if(getHolder().getSurface().isValid()){
 
             Canvas canvas = getHolder().lockCanvas();
             canvas.drawBitmap(background1.background, background1.x, background1.y, paint);
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
-            if(!Rect.intersects(junkyFood.rectangle, runner.runnerRectangle) && !junkyFood.isCollision){
-                canvas.drawBitmap(junkyFood.junkyFood, junkyFood.x, junkyFood.y, paint);
-            }
-            if(Rect.intersects(runner.runnerRectangle, junkyFood.rectangle)) {
-                junkyFood.isCollision = true;
-                if (junkyFood.firstCollision) {
-                    junkyFood.firstCollision = false;
-                    minusHeart++;
+            for(JunkyFood i : junkyFood){
+                if(!Rect.intersects(i.rectangle, runner.runnerRectangle) && !i.isCollision){
+                    canvas.drawBitmap(i.junkyFood, i.x, i.y, paint);
+                }
+                if(Rect.intersects(runner.runnerRectangle, i.rectangle)) {
+                    i.isCollision = true;
+                    if (i.firstCollision) {
+                        i.firstCollision = false;
+                        minusHeart++;
+                    }
                 }
             }
+
 
 
 
@@ -189,19 +212,63 @@ class Game extends SurfaceView implements Runnable {
             }
             canvas.drawText(score.points(), score.x, score.y, paint);
             canvas.drawBitmap(runner.runner[runner.frameNum], runner.xPosition, runner.yPosition, paint);
-            if(minusHeart>= 3){
-                canvas.drawBitmap(junkyFood.junkyFood, junkyFood.x, junkyFood.y, paint);
+            for(JunkyFood i : junkyFood){
+                if(minusHeart>= 3){
+                    canvas.drawBitmap(i.junkyFood, i.x, i.y, paint);
+                }
             }
+
             getHolder().unlockCanvasAndPost(canvas);
 
             if(minusHeart >= 3){
-                pause();
+                isPlaying = false;
+                waitBeforeExiting ();
             }
 
 
         }
 
 
+    }
+
+    private void waitBeforeExiting() {
+
+        try {
+            Thread.sleep(3000);
+            activity.startActivity(new Intent(activity, MainActivity.class));
+            activity.finish();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void defaultJunkyFoodPosition(){
+        junkyFoodxpos = 2;
+        for(JunkyFood i : junkyFood){
+            i.junkyFoodChange();
+            if(i.x + i.width < 0){
+                i.x = Game.getScreenWidth() + 900*junkyFoodxpos;
+                junkyFoodxpos ++;
+                i.isCollision = false;
+                i.firstCollision = true;
+            }
+            i.updateRectPosition();
+        }
+    }
+
+    public void defaultHealthyFoodPosition(){
+        healthyFoodXPos = 2;
+        for(HealthyFood i : healthyFoods){
+            i.healthyFoodChange();
+            if(i.x + i.width < 0 || i.isCollision){
+                i.x = Game.getScreenWidth() + 900*healthyFoodXPos;
+                healthyFoodXPos ++;
+                i.isCollision = false;
+                i.firstCollision = true;
+            }
+            i.updateRectPosition();
+        }
     }
 
 

@@ -10,7 +10,7 @@ class HealthyFood {
     public int x = 0 ;
     public boolean isCollision = false;
     public boolean firstCollision = true;
-    int y = Game.getScreenHeight() / 2 + 200;
+    int y = Game.getScreenHeight() / 2 + 220;
     int width;
     int height;
     Bitmap healthyFood;
@@ -19,8 +19,8 @@ class HealthyFood {
     HealthyFood(Resources resources){
 
         healthyFood = BitmapFactory.decodeResource(resources, R.drawable.onion);
-        width = Game.getScreenWidth() / 7;
-        height = Game.getScreenHeight() / 6;
+        width = Game.getScreenWidth() / 8;
+        height = Game.getScreenHeight() / 7;
         healthyFood = Bitmap.createScaledBitmap(healthyFood, width, height, false);
 
 
@@ -28,7 +28,7 @@ class HealthyFood {
 
     public void healthyFoodChange(){
 
-        x -= 10;
+        x -= 15;
     }
 
     public void updateRectPosition(){
