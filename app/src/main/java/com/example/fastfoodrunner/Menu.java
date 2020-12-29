@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Menu extends Activity {
 
     public void start(View view){
-        Intent intent = new Intent(Menu.this, GameActivity.class);
+        Intent intent = new Intent(Menu.this, CuriositiesActivity.class);
         startActivity(intent);
 
     }

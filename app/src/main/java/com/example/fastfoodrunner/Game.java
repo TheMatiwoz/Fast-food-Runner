@@ -1,21 +1,18 @@
 package com.example.fastfoodrunner;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
-import androidx.constraintlayout.solver.widgets.Rectangle;
 
 class Game extends SurfaceView implements Runnable {
 
@@ -41,6 +38,8 @@ class Game extends SurfaceView implements Runnable {
     private int minusHeart = 0;
 
     private GameActivity activity;
+
+    Bitmap gameOver;
 
 
     //TO Do
@@ -81,6 +80,8 @@ class Game extends SurfaceView implements Runnable {
         junkyFood.add(junkyFood1);
         junkyFood.add(junkyFood2);
         junkyFood.add(junkyFood3);
+
+        gameOver = BitmapFactory.decodeResource(getResources(), R.drawable.koniec);
 
 
         score = new HighScore();
@@ -137,30 +138,9 @@ class Game extends SurfaceView implements Runnable {
         background2.backgroundChange();
         runner.jump();
         defaultHealthyFoodPosition();
-//        for(HealthyFood he:healthyFoods){
-//            he.healthyFoodChange();
-//            if(he.x + he.width < 0){
-//                he.x = Game.getScreenWidth();
-//                he.isCollision = false;
-//                he.firstCollision = true;
-//
-//            }
-//            he.updateRectPosition();
-//        }
-
 
         runner.updateRectPosition();
         defaultJunkyFoodPosition();
-
-//        for(JunkyFood i : junkyFood){
-//            i.junkyFoodChange();
-//            if(i.x + i.width < 0){
-//                i.x = getScreenWidth();
-//                i.isCollision = false;
-//                i.firstCollision = true;
-//            }
-//            i.updateRectPosition();
-//        }
 
 
 
@@ -215,6 +195,7 @@ class Game extends SurfaceView implements Runnable {
             for(JunkyFood i : junkyFood){
                 if(minusHeart>= 3){
                     canvas.drawBitmap(i.junkyFood, i.x, i.y, paint);
+                    canvas.drawBitmap(gameOver, (getScreenWidth()/2 - gameOver.getWidth()/2 + 50), (getScreenHeight()/2 - gameOver.getHeight()/2), paint);
                 }
             }
 
@@ -222,7 +203,6 @@ class Game extends SurfaceView implements Runnable {
 
             if(minusHeart >= 3){
                 isPlaying = false;
-                waitBeforeExiting ();
             }
 
 
@@ -233,13 +213,8 @@ class Game extends SurfaceView implements Runnable {
 
     private void waitBeforeExiting() {
 
-        try {
-            Thread.sleep(3000);
-            activity.startActivity(new Intent(activity, MainActivity.class));
-            activity.finish();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        activity.startActivity(new Intent(activity, MainActivity.class));
+        activity.finish();
 
     }
 
@@ -276,6 +251,9 @@ class Game extends SurfaceView implements Runnable {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        if(!isPlaying && event.getAction() == MotionEvent.ACTION_DOWN){
+            waitBeforeExiting();
+        }
 
         if(event.getAction() == MotionEvent.ACTION_DOWN && runner.yPosition >= ((Game.getScreenHeight() / 2) + 100)) {
             runner.isGoingUp = true;
