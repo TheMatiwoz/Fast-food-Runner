@@ -1,22 +1,16 @@
 package com.example.fastfoodrunner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class CuriositiesActivity extends Activity {
 
@@ -62,11 +56,5 @@ public class CuriositiesActivity extends Activity {
         TextView curiosityText = findViewById(R.id.curiosities);
         int text = rand.nextInt(curiosities.size());
         curiosityText.setText(curiosities.get(text));
-
-        String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
-        System.out.println(sessionId);
     }
-
-
-
 }

@@ -1,6 +1,5 @@
 package com.example.fastfoodrunner;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 
 class MusicPlayer {

@@ -1,7 +1,6 @@
 package com.example.fastfoodrunner;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -18,45 +17,41 @@ import java.util.Random;
 
 class Game extends SurfaceView implements Runnable {
 
-    private final JunkFood junkFood1;
-    private final JunkFood junkFood2;
-    private final JunkFood junkFood3;
-    private ArrayList<JunkFood> junkFood = new ArrayList<>();
+    //TODO
+    // generowanie healthyfood i junkfood
+    // scalowanie na inne użądzenia
+
+
+    public static float scrRatioX, scrRatioY;
+    private final ArrayList<JunkFood> junkFood = new ArrayList<>();
     private Thread thread;
     private boolean isPlaying;
     private final Background background1;
     private final Background background2;
     private final Runner runner;
     private final Paint paint;
-    private Hearts heart1, heart2, heart3;
-    private HighScore score;
-    private HealthyFood healthyFood, healthyFood2, healthyFood3;
-    private ArrayList<Hearts> hearts = new ArrayList<>();
-    private boolean firstClick = true;
-    private ArrayList<HealthyFood> healthyFoods = new ArrayList<>();
+    private final HighScore score;
+    private final ArrayList<Hearts> hearts = new ArrayList<>();
+    private final ArrayList<HealthyFood> healthyFoods = new ArrayList<>();
     private int junkFoodxpos = 2;
     private int healthyFoodXPos = 2;
     private Random rand = new Random();
     private int minusHeart = 0;
-
     public GameActivity activity;
-
-    private SharedPreferences KFCPrefs;
-    private SharedPreferences MCPrefs;
-
-    Bitmap gameOver;
-
-    private MusicPlayer musicPlayer;
-
-
-    //TO Do
-    // Multiply HealthyFood
-    // Improve jumping
-
+    private final Bitmap gameOver;
+    private final MusicPlayer musicPlayer;
+    private boolean firstClick = true;
+    private int screenX;
+    private int screenY;
 
     public Game(GameActivity activity){
         super(activity);
         this.activity = activity;
+
+        screenX = getScreenWidth();
+        screenY = getScreenHeight();
+        scrRatioX = 1794f / screenX;
+        scrRatioY = 1080f / screenY;
 
         int level = activity.getIntent().getIntExtra("Level", 0);
 
@@ -65,30 +60,27 @@ class Game extends SurfaceView implements Runnable {
 
         background1 = new Background(getScreenWidth(), getScreenHeight(), getResources(), level);
         background2 = new Background(getScreenWidth(), getScreenHeight(), getResources(), level);
-
         background2.x = getScreenWidth();
 
-        heart1 = new Hearts(getResources());
-        heart2 = new Hearts(getResources());
-        heart3 = new Hearts(getResources());
+        Hearts heart1 = new Hearts(getResources());
+        Hearts heart2 = new Hearts(getResources());
+        Hearts heart3 = new Hearts(getResources());
         hearts.add(heart1);
         hearts.add(heart2);
         hearts.add(heart3);
 
-
         runner = new Runner(getResources(), level);
 
-        healthyFood = new HealthyFood(getResources(), level);
-        healthyFood2 = new HealthyFood(getResources(), level);
-        healthyFood3 = new HealthyFood(getResources(), level);
+        HealthyFood healthyFood = new HealthyFood(getResources(), level);
+        HealthyFood healthyFood2 = new HealthyFood(getResources(), level);
+        HealthyFood healthyFood3 = new HealthyFood(getResources(), level);
         healthyFoods.add(healthyFood);
         healthyFoods.add(healthyFood2);
         healthyFoods.add(healthyFood3);
 
-        junkFood1 = new JunkFood(getResources(), level);
-        junkFood2 = new JunkFood(getResources(), level);
-        junkFood3 = new JunkFood(getResources(), level);
-
+        JunkFood junkFood1 = new JunkFood(getResources(), level);
+        JunkFood junkFood2 = new JunkFood(getResources(), level);
+        JunkFood junkFood3 = new JunkFood(getResources(), level);
 
         junkFood.add(junkFood1);
         junkFood.add(junkFood2);
@@ -96,16 +88,15 @@ class Game extends SurfaceView implements Runnable {
 
         gameOver = BitmapFactory.decodeResource(getResources(), R.drawable.koniec);
 
-
         score = new HighScore(activity, level);
 
         for (HealthyFood i:healthyFoods) {
-            i.x =  Game.getScreenWidth() + 700*healthyFoodXPos;
+            i.x =  Game.getScreenWidth() + 500*healthyFoodXPos;
             healthyFoodXPos ++;
         }
 
         for (JunkFood i: junkFood) {
-            i.x =  Game.getScreenWidth() + 800*junkFoodxpos;
+            i.x =  Game.getScreenWidth() + 600*junkFoodxpos;
             junkFoodxpos ++;
         }
 
@@ -152,10 +143,9 @@ class Game extends SurfaceView implements Runnable {
         runner.jump();
 
         defaultHealthyFoodPosition();
-
-        runner.updateRectPosition();
         defaultJunkFoodPosition();
 
+        runner.updateRectPosition();
         runner.delayMove();
 
 
@@ -170,15 +160,15 @@ class Game extends SurfaceView implements Runnable {
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
 
 
-            for(JunkFood i : junkFood){
-                if(!Rect.intersects(i.rectangle, runner.runnerRectangle) && !i.isCollision){
-                    canvas.drawBitmap(i.junkFood, i.x, i.y, paint);
+            for(JunkFood food : junkFood){
+                if(!Rect.intersects(food.rectangle, runner.runnerRectangle) && !food.isCollision){
+                    canvas.drawBitmap(food.junkFood, food.x, food.y, paint);
                 }
-                if(Rect.intersects(runner.runnerRectangle, i.rectangle)) {
-                    i.isCollision = true;
-                    if (i.firstCollision) {
+                if(Rect.intersects(runner.runnerRectangle, food.rectangle)) {
+                    food.isCollision = true;
+                    if (food.firstCollision && !firstClick) {
                         musicPlayer.collisionSound();
-                        i.firstCollision = false;
+                        food.firstCollision = false;
                         minusHeart++;
                     }
                 }
@@ -190,7 +180,7 @@ class Game extends SurfaceView implements Runnable {
                 }
                 if(Rect.intersects(runner.runnerRectangle, he.healthyFoodRectangle)){
                     he.isCollision = true;
-                    if(he.firstCollision){
+                    if(he.firstCollision && !firstClick){
                         musicPlayer.pointSound();
                         score.gamePoints ++;
                         he.firstCollision = false;
@@ -227,7 +217,7 @@ class Game extends SurfaceView implements Runnable {
 
     }
 
-    private void waitBeforeExiting() {
+    private void backToMainActivity() {
 
         activity.startActivity(new Intent(activity, MainActivity.class));
         activity.finish();
@@ -235,11 +225,13 @@ class Game extends SurfaceView implements Runnable {
     }
 
     public void defaultJunkFoodPosition(){
-        junkFoodxpos = 2;
+        if(junkFoodxpos>(junkFood.size()+2)){
+            junkFoodxpos = 2;
+        }
         for(JunkFood i : junkFood){
             i.junkFoodChange();
             if(i.x + i.width < 0){
-                i.x = Game.getScreenWidth() + 900*junkFoodxpos;
+                i.x = Game.getScreenWidth() + 600*junkFoodxpos;
                 junkFoodxpos ++;
                 i.isCollision = false;
                 i.firstCollision = true;
@@ -249,11 +241,13 @@ class Game extends SurfaceView implements Runnable {
     }
 
     public void defaultHealthyFoodPosition(){
-        healthyFoodXPos = 2;
+        if(healthyFoodXPos > (healthyFoods.size() + 2)){
+            healthyFoodXPos = 2;
+        }
         for(HealthyFood i : healthyFoods){
             i.healthyFoodChange();
             if(i.x + i.width < 0 || i.isCollision){
-                i.x = Game.getScreenWidth() + 900*healthyFoodXPos;
+                i.x = Game.getScreenWidth() + 500*healthyFoodXPos;
                 healthyFoodXPos ++;
                 i.isCollision = false;
                 i.firstCollision = true;
@@ -262,8 +256,6 @@ class Game extends SurfaceView implements Runnable {
         }
     }
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -271,10 +263,15 @@ class Game extends SurfaceView implements Runnable {
         if(!isPlaying && event.getAction() == MotionEvent.ACTION_DOWN){
             musicPlayer.stop();
             score.saveIfHighScore();
-            waitBeforeExiting();
+            backToMainActivity();
         }
 
         if(event.getAction() == MotionEvent.ACTION_DOWN && runner.yPosition >= ((Game.getScreenHeight() / 2) + 100)) {
+
+            if(firstClick){
+
+                firstClick = false;
+            }
             runner.isGoingUp = true;
         }
         return true;

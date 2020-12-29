@@ -7,7 +7,7 @@ import android.graphics.Rect;
 
 
 class HealthyFood {
-    public int x = 0 ;
+    public int x;
     public boolean isCollision = false;
     public boolean firstCollision = true;
     int y = Game.getScreenHeight() / 2 + 220;

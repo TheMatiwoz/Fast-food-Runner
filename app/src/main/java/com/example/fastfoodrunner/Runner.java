@@ -9,24 +9,23 @@ import androidx.constraintlayout.solver.widgets.Rectangle;
 
 class Runner {
 
-    Bitmap[] runner;
-    //private final int XPOS;
+    public Bitmap[] runner;
+    public int xPosition;
+    public int yPosition;
+    public int frameNum =0;
+    public Rect runnerRectangle;
+    public boolean isGoingUp = false;
     private final int YPOS;
-    int xPosition;
-    int yPosition;
-    public int width;
-    public int height;
-    boolean isGoingUp = false;
-    public final float UPVELOCITY = 45;  // Manipulate to change height
-    float downVelocity = 0, upVelocity = UPVELOCITY;
-    float gravityUp = 2.5f;
-    float gravityDown = 1.4f;
-    int frameNum =0;
-    int delayRunnerMove = 0;
-    Rect runnerRectangle;
+    private int width;
+    private int height;
+    private final float UPVELOCITY = 45;  // Manipulate to change height
+    private float downVelocity = 0, upVelocity = UPVELOCITY;
+    public float gravityUp = 2.5f;
+    private float gravityDown = 1.4f;
+    private int delayRunnerMove = 0;
 
 
-    Runner(Resources resources, int level){
+    public Runner(Resources resources, int level){
         runner = new Bitmap[4];
         if(level == 0){
             runner[0] = BitmapFactory.decodeResource(resources, R.drawable.frame1);

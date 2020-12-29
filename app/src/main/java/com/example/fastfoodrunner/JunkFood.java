@@ -7,7 +7,7 @@ import android.graphics.Rect;
 
 class JunkFood {
     private final int level;
-    public int x = Game.getScreenWidth() + 700*4;
+    public int x;
     public boolean isCollision = false;
     public boolean firstCollision = true;
     int y = Game.getScreenHeight() / 2 + 240;
