@@ -16,9 +16,13 @@ class HealthyFood {
     Bitmap healthyFood;
     Rect healthyFoodRectangle;
 
-    HealthyFood(Resources resources){
+    HealthyFood(Resources resources, int level){
 
-        healthyFood = BitmapFactory.decodeResource(resources, R.drawable.onion);
+        int[] healthyFoodList = new int[2];
+        healthyFoodList[0] = R.drawable.orange;
+        healthyFoodList[1] = R.drawable.tomato;
+
+        healthyFood = BitmapFactory.decodeResource(resources, healthyFoodList[level]);
         width = Game.getScreenWidth() / 8;
         height = Game.getScreenHeight() / 7;
         healthyFood = Bitmap.createScaledBitmap(healthyFood, width, height, false);

@@ -10,9 +10,14 @@ class Background {
     int y = 0;
     Bitmap background;
 
-    Background(int screenX, int screenY, Resources resources){
+    Background(int screenX, int screenY, Resources resources, int level){
 
-        background = BitmapFactory.decodeResource(resources, R.drawable.kfcbg);
+        int[] backgroundList = new int[2];
+        backgroundList[0] = R.drawable.kfcbg;
+        backgroundList[1] = R.drawable.mcbg;
+
+
+        background = BitmapFactory.decodeResource(resources, backgroundList[level]);
         background = Bitmap.createScaledBitmap(background, screenX, screenY, false);
 
     }

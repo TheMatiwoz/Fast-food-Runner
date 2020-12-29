@@ -1,12 +1,38 @@
 package com.example.fastfoodrunner;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 class HighScore {
     int gamePoints = 0;
-    String stringGamePoinst;
-    int x = Game.getScreenWidth() - 200;
+    int x = Game.getScreenWidth() - 250;
     int y = 100;
+    private SharedPreferences KFCPrefs;
+    private SharedPreferences MCPrefs;
+    private int level;
+
+    public HighScore(GameActivity activity, int level){
+        this.level = level;
+        KFCPrefs = activity.getSharedPreferences("kfc_game", Context.MODE_PRIVATE);
+        MCPrefs = activity.getSharedPreferences("mc_game", Context.MODE_PRIVATE);
+    }
 
     public String points(){
         return "WYNIK: " + gamePoints;
+    }
+
+    public void saveIfHighScore() {
+
+        if (KFCPrefs.getInt("highscore", 0) < gamePoints && level == 0) {
+            SharedPreferences.Editor editor = KFCPrefs.edit();
+            editor.putInt("highscore", gamePoints);
+            editor.apply();
+        }
+        if (MCPrefs.getInt("highscore", 0) < gamePoints && level == 1) {
+            SharedPreferences.Editor editor = MCPrefs.edit();
+            editor.putInt("highscore", gamePoints);
+            editor.apply();
+        }
+
     }
 }

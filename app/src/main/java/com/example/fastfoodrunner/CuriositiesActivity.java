@@ -26,6 +26,7 @@ public class CuriositiesActivity extends Activity {
     public void gra(View view){
 
         Intent intent = new Intent(CuriositiesActivity.this, GameActivity.class);
+        intent.putExtra("Level", getIntent().getIntExtra("Level", 0));
         startActivity(intent);
     }
 
@@ -61,6 +62,9 @@ public class CuriositiesActivity extends Activity {
         TextView curiosityText = findViewById(R.id.curiosities);
         int text = rand.nextInt(curiosities.size());
         curiosityText.setText(curiosities.get(text));
+
+        String sessionId = getIntent().getStringExtra("EXTRA_SESSION_ID");
+        System.out.println(sessionId);
     }
 
 

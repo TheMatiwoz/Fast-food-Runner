@@ -25,6 +25,7 @@
         android:autoSizeTextType="uniform"
         android:background="#00008B"
         android:gravity="center_vertical"
+        android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="24sp"

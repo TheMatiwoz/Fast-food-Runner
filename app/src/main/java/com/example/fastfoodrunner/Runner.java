@@ -24,25 +24,29 @@ class Runner {
     Rect runnerRectangle;
 
 
-    Runner(Resources resources){
-        runner = new Bitmap[5];
-        runner[0] = BitmapFactory.decodeResource(resources, R.drawable.frame1);
-        runner[1] = BitmapFactory.decodeResource(resources, R.drawable.frame2);
-        runner[2] = BitmapFactory.decodeResource(resources, R.drawable.frame3);
-        runner[3] = BitmapFactory.decodeResource(resources, R.drawable.frame4);
-        runner[4] = BitmapFactory.decodeResource(resources, R.drawable.frame5);
+    Runner(Resources resources, int level){
+        runner = new Bitmap[4];
+        if(level == 0){
+            runner[0] = BitmapFactory.decodeResource(resources, R.drawable.frame1);
+            runner[1] = BitmapFactory.decodeResource(resources, R.drawable.frame2);
+            runner[2] = BitmapFactory.decodeResource(resources, R.drawable.frame3);
+            runner[3] = BitmapFactory.decodeResource(resources, R.drawable.frame4);
+        }else{
+            runner[0] = BitmapFactory.decodeResource(resources, R.drawable.mcframe1);
+            runner[1] = BitmapFactory.decodeResource(resources, R.drawable.mcframe2);
+            runner[2] = BitmapFactory.decodeResource(resources, R.drawable.mcframe3);
+            runner[3] = BitmapFactory.decodeResource(resources, R.drawable.mcframe4);
+        }
 
         width = runner[0].getWidth() / 4;
         height = runner[0].getHeight() / 4;
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < runner.length; i++){
             runner[i] = Bitmap.createScaledBitmap(runner[i], width, height, false);
         }
 
         xPosition = Game.getScreenWidth() / 10;
         yPosition = (Game.getScreenHeight() / 2) + 100;
-
-
 
     }
 
@@ -83,7 +87,7 @@ class Runner {
         }
         else{
             delayRunnerMove = 0;
-            if (frameNum < 4) {
+            if (frameNum < 3) {
                 frameNum++;
             }
             else{

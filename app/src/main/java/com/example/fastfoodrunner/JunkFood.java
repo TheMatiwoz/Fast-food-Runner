@@ -5,29 +5,41 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
-class JunkyFood {
+class JunkFood {
+    private final int level;
     public int x = Game.getScreenWidth() + 700*4;
     public boolean isCollision = false;
     public boolean firstCollision = true;
     int y = Game.getScreenHeight() / 2 + 240;
     int width;
     int height;
-    Bitmap junkyFood;
+    Bitmap junkFood;
     Rect rectangle;
 
-    JunkyFood(Resources resources){
+    JunkFood(Resources resources, int level){
 
-        junkyFood = BitmapFactory.decodeResource(resources, R.drawable.kfcbox);
+        this.level = level;
+
+        int[] junkFoodList = new int[2];
+        junkFoodList[0] = R.drawable.kfcbox;
+        junkFoodList[1] = R.drawable.burger;
+
+        junkFood = BitmapFactory.decodeResource(resources, junkFoodList[level]);
         width = Game.getScreenWidth() / 10;
         height = Game.getScreenHeight() / 7;
-        junkyFood = Bitmap.createScaledBitmap(junkyFood, width, height, false);
+        junkFood = Bitmap.createScaledBitmap(junkFood, width, height, false);
 
 
     }
 
-    public void junkyFoodChange(){
+    public void junkFoodChange(){
 
-        x -= 15;
+        if(level == 0){
+            x -= 15;
+        }else{
+            x -=17;
+        }
+
     }
 
     public void updateRectPosition(){
