@@ -46,6 +46,8 @@ class Game extends SurfaceView implements Runnable {
 
     Bitmap gameOver;
 
+    private MusicPlayer musicPlayer;
+
 
     //TO Do
     // Multiply HealthyFood
@@ -58,6 +60,8 @@ class Game extends SurfaceView implements Runnable {
 
         int level = activity.getIntent().getIntExtra("Level", 0);
 
+        musicPlayer = new MusicPlayer(activity, level);
+        musicPlayer.play();
 
         background1 = new Background(getScreenWidth(), getScreenHeight(), getResources(), level);
         background2 = new Background(getScreenWidth(), getScreenHeight(), getResources(), level);
@@ -146,12 +150,11 @@ class Game extends SurfaceView implements Runnable {
         background1.backgroundChange();
         background2.backgroundChange();
         runner.jump();
+
         defaultHealthyFoodPosition();
 
         runner.updateRectPosition();
         defaultJunkFoodPosition();
-
-
 
         runner.delayMove();
 
@@ -165,6 +168,8 @@ class Game extends SurfaceView implements Runnable {
             Canvas canvas = getHolder().lockCanvas();
             canvas.drawBitmap(background1.background, background1.x, background1.y, paint);
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
+
+
             for(JunkFood i : junkFood){
                 if(!Rect.intersects(i.rectangle, runner.runnerRectangle) && !i.isCollision){
                     canvas.drawBitmap(i.junkFood, i.x, i.y, paint);
@@ -172,19 +177,12 @@ class Game extends SurfaceView implements Runnable {
                 if(Rect.intersects(runner.runnerRectangle, i.rectangle)) {
                     i.isCollision = true;
                     if (i.firstCollision) {
+                        musicPlayer.collisionSound();
                         i.firstCollision = false;
                         minusHeart++;
                     }
                 }
             }
-
-
-
-
-            for(int i = 0; i<hearts.size() - minusHeart; i++){
-                canvas.drawBitmap(hearts.get(i).heart, hearts.get(i).x + 15 +i*hearts.get(i).width, hearts.get(i).y, paint);
-            }
-
 
             for(HealthyFood he:healthyFoods){
                 if(!Rect.intersects(runner.runnerRectangle, he.healthyFoodRectangle) && !he.isCollision){
@@ -193,14 +191,22 @@ class Game extends SurfaceView implements Runnable {
                 if(Rect.intersects(runner.runnerRectangle, he.healthyFoodRectangle)){
                     he.isCollision = true;
                     if(he.firstCollision){
+                        musicPlayer.pointSound();
                         score.gamePoints ++;
                         he.firstCollision = false;
                     }
 
                 }
             }
-            canvas.drawText(score.points(), score.x, score.y, paint);
+
             canvas.drawBitmap(runner.runner[runner.frameNum], runner.xPosition, runner.yPosition, paint);
+
+            for(int i = 0; i<hearts.size() - minusHeart; i++){
+                canvas.drawBitmap(hearts.get(i).heart, hearts.get(i).x + 15 +i*hearts.get(i).width, hearts.get(i).y, paint);
+            }
+
+            canvas.drawText(score.points(), score.x, score.y, paint);
+
             for(JunkFood i : junkFood){
                 if(minusHeart>= 3){
                     canvas.drawBitmap(i.junkFood, i.x, i.y, paint);
@@ -263,6 +269,7 @@ class Game extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent event) {
 
         if(!isPlaying && event.getAction() == MotionEvent.ACTION_DOWN){
+            musicPlayer.stop();
             score.saveIfHighScore();
             waitBeforeExiting();
         }

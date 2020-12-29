@@ -2,6 +2,7 @@ package com.example.fastfoodrunner;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends Activity {
 
-    public void poziom(View view){
+    public void menu(View view){
 
         Intent intent = new Intent(MainActivity.this, Menu.class);
         startActivity(intent);
@@ -27,6 +28,8 @@ public class MainActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+
     }
 
 

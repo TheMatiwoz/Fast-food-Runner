@@ -10,6 +10,8 @@ import androidx.constraintlayout.solver.widgets.Rectangle;
 class Runner {
 
     Bitmap[] runner;
+    //private final int XPOS;
+    private final int YPOS;
     int xPosition;
     int yPosition;
     public int width;
@@ -46,7 +48,13 @@ class Runner {
         }
 
         xPosition = Game.getScreenWidth() / 10;
-        yPosition = (Game.getScreenHeight() / 2) + 100;
+        if(level == 0){
+
+            YPOS = (Game.getScreenHeight() / 2) + 100;
+        } else{
+            YPOS = (Game.getScreenHeight() / 2) + 136;
+        }
+        yPosition = YPOS;
 
     }
 
@@ -58,8 +66,8 @@ class Runner {
         }
 
 
-        if(yPosition > ((Game.getScreenHeight() / 2) + 100)){
-            yPosition = ((Game.getScreenHeight() / 2) + 100);
+        if(yPosition > YPOS){
+            yPosition = YPOS;
             downVelocity = 0;
         }
 
