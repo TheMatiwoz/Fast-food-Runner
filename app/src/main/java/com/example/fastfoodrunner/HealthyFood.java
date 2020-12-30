@@ -7,16 +7,17 @@ import android.graphics.Rect;
 
 
 class HealthyFood {
+    static int y = Game.getScreenHeight() / 2 + 220;
     public int x;
     public boolean isCollision = false;
     public boolean firstCollision = true;
-    int y = Game.getScreenHeight() / 2 + 220;
     int width;
     int height;
     Bitmap healthyFood;
     Rect healthyFoodRectangle;
+    private int speed = 15;
 
-    HealthyFood(Resources resources, int level){
+    HealthyFood(Resources resources, int level) {
 
         int[] healthyFoodList = new int[2];
         healthyFoodList[0] = R.drawable.orange;
@@ -30,13 +31,17 @@ class HealthyFood {
 
     }
 
-    public void healthyFoodChange(){
-
-        x -= 15;
+    public void changeSpeed(int randomSpeed) {
+        speed = randomSpeed;
     }
 
-    public void updateRectPosition(){
-        healthyFoodRectangle = new Rect(x,y - height, x + width, y);
+    public void healthyFoodChange() {
+
+        x -= speed;
+    }
+
+    public void updateRectPosition() {
+        healthyFoodRectangle = new Rect(x, y - height, x + width, y);
 
     }
 

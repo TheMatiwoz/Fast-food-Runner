@@ -6,19 +6,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 class JunkFood {
-    private final int level;
     public int x;
     public boolean isCollision = false;
     public boolean firstCollision = true;
+    public int multiply = 1;
     int y = Game.getScreenHeight() / 2 + 240;
     int width;
     int height;
     Bitmap junkFood;
     Rect rectangle;
+    private int speed = 15;
 
-    JunkFood(Resources resources, int level){
-
-        this.level = level;
+    JunkFood(Resources resources, int level) {
 
         int[] junkFoodList = new int[2];
         junkFoodList[0] = R.drawable.kfcbox;
@@ -32,18 +31,18 @@ class JunkFood {
 
     }
 
-    public void junkFoodChange(){
+    public void changeSpeed(int newSpeed) {
+        speed += newSpeed;
+    }
 
-        if(level == 0){
-            x -= 15;
-        }else{
-            x -=17;
-        }
+    public void junkFoodChange() {
+
+        x -= speed;
 
     }
 
-    public void updateRectPosition(){
-         rectangle = new Rect(x,y - height, x + width, y);
+    public void updateRectPosition() {
+        rectangle = new Rect(x, y - height, x + width, y);
 
     }
 }

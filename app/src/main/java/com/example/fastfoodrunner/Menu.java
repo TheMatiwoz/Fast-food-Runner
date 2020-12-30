@@ -7,18 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class Menu extends Activity {
 
-    public void startKFC(View view){
+    public void startKFC(View view) {
         Intent intent = new Intent(Menu.this, CuriositiesActivity.class);
         intent.putExtra("Level", 0);
         startActivity(intent);
 
     }
 
-    public void startMC(View view){
+    public void startMC(View view) {
         Intent intent = new Intent(Menu.this, CuriositiesActivity.class);
         intent.putExtra("Level", 1);
         startActivity(intent);

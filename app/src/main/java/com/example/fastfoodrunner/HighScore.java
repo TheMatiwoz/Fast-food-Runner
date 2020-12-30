@@ -7,17 +7,17 @@ class HighScore {
     int gamePoints = 0;
     int x = Game.getScreenWidth() - 250;
     int y = 100;
-    private SharedPreferences KFCPrefs;
-    private SharedPreferences MCPrefs;
-    private int level;
+    private final SharedPreferences KFCPrefs;
+    private final SharedPreferences MCPrefs;
+    private final int level;
 
-    public HighScore(GameActivity activity, int level){
+    public HighScore(GameActivity activity, int level) {
         this.level = level;
         KFCPrefs = activity.getSharedPreferences("kfc_game", Context.MODE_PRIVATE);
         MCPrefs = activity.getSharedPreferences("mc_game", Context.MODE_PRIVATE);
     }
 
-    public String points(){
+    public String points() {
         return "WYNIK: " + gamePoints;
     }
 

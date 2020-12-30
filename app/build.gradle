@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\Programowanie\\Java\\Repo\\Runner\\app\\build\\outputs\\apk\\release\\app-release-unsigned.apk')
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion 29
 
     defaultConfig {

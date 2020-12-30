@@ -11,7 +11,7 @@ class Hearts {
     public int y = 15;
     Bitmap heart;
 
-    Hearts(Resources resources){
+    Hearts(Resources resources) {
         heart = BitmapFactory.decodeResource(resources, R.drawable.heart);
         width = Game.getScreenWidth() / 11;
         height = Game.getScreenHeight() / 8;
