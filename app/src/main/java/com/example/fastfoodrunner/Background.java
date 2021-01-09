@@ -4,6 +4,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+/**
+ * Create background bitmap, scale it and change x position
+ */
 class Background {
 
     int x = 0;
@@ -23,7 +26,7 @@ class Background {
     }
 
     public void backgroundChange(){
-        x -= (15 / Game.scrRatioX);
+        x -= 15;
 
         if(x + Game.getScreenWidth() < 0){
             x = Game.getScreenWidth();

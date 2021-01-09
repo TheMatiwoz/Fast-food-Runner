@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Starts and pause the game
+ */
 public class GameActivity extends Activity {
 
     Game game;

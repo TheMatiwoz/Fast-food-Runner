@@ -2,10 +2,13 @@ package com.example.fastfoodrunner;
 
 import android.media.MediaPlayer;
 
+/**
+ * In this class it is possible to control music using MediaPlayer
+ */
 class MusicPlayer {
 
-    private MediaPlayer mediaPlayer;
-    private GameActivity activity;
+    private final MediaPlayer mediaPlayer;
+    private final GameActivity activity;
 
     public MusicPlayer(GameActivity activity, int level) {
         this.activity = activity;

@@ -14,10 +14,13 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Main class, all necessary objects are created here
+ *
+ */
 class Game extends SurfaceView implements Runnable {
 
 
-    public static float scrRatioX, scrRatioY;
     private final ArrayList<JunkFood> junkFood = new ArrayList<>();
     private final Background background1;
     private final Background background2;
@@ -29,8 +32,6 @@ class Game extends SurfaceView implements Runnable {
     private final Bitmap gameOver;
     private final MusicPlayer musicPlayer;
     private final Random rand = new Random();
-    private final int screenX;
-    private final int screenY;
     public GameActivity activity;
     private Thread thread;
     private boolean isPlaying;
@@ -43,11 +44,6 @@ class Game extends SurfaceView implements Runnable {
     public Game(GameActivity activity) {
         super(activity);
         this.activity = activity;
-
-        screenX = getScreenWidth();
-        screenY = getScreenHeight();
-        scrRatioX = 1794f / screenX;
-        scrRatioY = 1080f / screenY;
 
         int level = activity.getIntent().getIntExtra("Level", 0);
 
@@ -95,13 +91,11 @@ class Game extends SurfaceView implements Runnable {
         score = new HighScore(activity, level);
 
         for (HealthyFood i : healthyFoods) {
-            i.x = (Game.getScreenWidth() + 500 * healthyFoodXPos);
-            healthyFoodXPos++;
+            initialHealthyFoodPosition(i);
         }
 
         for (JunkFood i : junkFood) {
-            i.x = (Game.getScreenWidth() + 700 * junkFoodXPos);
-            junkFoodXPos++;
+            initialJunkFoodPosition(i);
         }
 
         paint = new Paint();
@@ -143,36 +137,45 @@ class Game extends SurfaceView implements Runnable {
         }
     }
 
+    /**
+     * Responsible for changing the position of objects on the screen
+     */
     private void update() {
 
         background1.backgroundChange();
         background2.backgroundChange();
         runner.jump();
 
-        defaultHealthyFoodPosition();
-        defaultJunkFoodPosition();
+        changeHealthyFoodPosition();
+        changeJunkFoodPosition();
 
         runner.updateRectPosition();
         runner.delayMove();
     }
 
+    /**
+     * Responsible for drawing objects on the screen
+     */
     private void draw() {
 
         if (getHolder().getSurface().isValid()) {
 
+            // draw background
             Canvas canvas = getHolder().lockCanvas();
             canvas.drawBitmap(background1.background, background1.x, background1.y, paint);
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
 
+            // draw string before first click
             if (firstClick) {
                 canvas.drawText("Kliknij aby rozpocząć", (getScreenWidth() / 2f - 300f), getScreenHeight() / 2f, paint);
             }
 
+            // draw junk food obstacles
             for (JunkFood food : junkFood) {
-                if (!Rect.intersects(food.rectangle, runner.runnerRectangle) && !food.isCollision) {
+                if (!Rect.intersects(food.rectangle, runner.runnerRectangle) && !food.isCollision) { // draw junk food bitmap when there is no collision
                     canvas.drawBitmap(food.junkFood, food.x, food.y, paint);
                 }
-                if (Rect.intersects(runner.runnerRectangle, food.rectangle)) {
+                if (Rect.intersects(runner.runnerRectangle, food.rectangle)) { // do not draw junk food bitmap when there is collision
                     food.isCollision = true;
                     if (food.firstCollision && !firstClick) {
                         musicPlayer.collisionSound();
@@ -182,9 +185,10 @@ class Game extends SurfaceView implements Runnable {
                 }
             }
 
+            // draw healthy food bitmap
             for (HealthyFood he : healthyFoods) {
                 if (!Rect.intersects(runner.runnerRectangle, he.healthyFoodRectangle) && !he.isCollision) {
-                    canvas.drawBitmap(he.healthyFood, he.x, he.y, paint);
+                    canvas.drawBitmap(he.healthyFood, he.x, HealthyFood.y, paint);
                 }
                 if (Rect.intersects(runner.runnerRectangle, he.healthyFoodRectangle)) {
                     he.isCollision = true;
@@ -196,12 +200,15 @@ class Game extends SurfaceView implements Runnable {
                 }
             }
 
+            // draw runner
             canvas.drawBitmap(runner.runner[runner.frameNum], runner.xPosition, runner.yPosition, paint);
 
+            // draw proper number of hearts
             for (int i = 0; i < hearts.size() - minusHeart; i++) {
-                canvas.drawBitmap(hearts.get(i).heart, (hearts.get(i).x + 15) * scrRatioX + i * hearts.get(i).width, hearts.get(i).y, paint);
+                canvas.drawBitmap(hearts.get(i).heart, (hearts.get(i).x + 15) + i * hearts.get(i).width, hearts.get(i).y, paint);
             }
 
+            // draw points in rhe right corner of the screen
             canvas.drawText(score.points(), score.x, score.y, paint);
 
             for (JunkFood i : junkFood) {
@@ -226,21 +233,20 @@ class Game extends SurfaceView implements Runnable {
 
     }
 
-    public void defaultJunkFoodPosition() {
-        if (junkFoodXPos > (junkFood.size() + 2)) {
-            junkFoodXPos = 2;
+    public void changeJunkFoodPosition() {
+        if (junkFoodXPos > (junkFood.size() + 2)) { //
+            junkFoodXPos = 2; // a multiplier that determines the spacing between next objects
         }
         for (JunkFood i : junkFood) {
             if (!firstClick) {
-                i.junkFoodChange();
+                i.junkFoodChange(); // start changing object position after first click
             }
             if (i.x + i.width < 0) {
-                i.x = Game.getScreenWidth() + (rand.nextInt(100) + 600) * junkFoodXPos;
+                initialJunkFoodPosition(i);
                 if (score.gamePoints > 15 * i.multiply) {
-                    i.changeSpeed(5);
+                    i.changeSpeed(5); // after multiple 15 points increase movement of junk food objects
                     i.multiply++;
                 }
-                junkFoodXPos++;
                 i.isCollision = false;
                 i.firstCollision = true;
             }
@@ -248,22 +254,39 @@ class Game extends SurfaceView implements Runnable {
         }
     }
 
-    public void defaultHealthyFoodPosition() {
+    public void changeHealthyFoodPosition() {
         if (healthyFoodXPos > (healthyFoods.size() + 2)) {
-            healthyFoodXPos = 2;
+            healthyFoodXPos = 2; // a multiplier that determines the spacing between next objects
         }
         for (HealthyFood i : healthyFoods) {
             if (!firstClick) {
-                i.healthyFoodChange();
+                i.changePosition(); // start changing object position after first click
             }
             if (i.x + i.width < 0 || i.isCollision) {
-                i.x = Game.getScreenWidth() + (rand.nextInt(100) + 500) * healthyFoodXPos;
-                healthyFoodXPos++;
+                initialHealthyFoodPosition(i);
                 i.isCollision = false;
                 i.firstCollision = true;
             }
             i.updateRectPosition();
         }
+    }
+
+    /**
+     * Set new HealthyFood object position on right side of screen
+     * @param food HealthyFood bitmap which should be changed
+     */
+    private void initialHealthyFoodPosition(HealthyFood food){
+        food.x = Game.getScreenWidth() + (rand.nextInt(100) + 500) * healthyFoodXPos;
+        healthyFoodXPos++;
+    }
+
+    /**
+     * Set new JunkFood object position on right side of screen
+     * @param food JunkFood bitmap which should be changed
+     */
+    private void initialJunkFoodPosition(JunkFood food){
+        food.x = Game.getScreenWidth() + (rand.nextInt(100) + 600) * junkFoodXPos;
+        junkFoodXPos++;
     }
 
     @SuppressLint("ClickableViewAccessibility")

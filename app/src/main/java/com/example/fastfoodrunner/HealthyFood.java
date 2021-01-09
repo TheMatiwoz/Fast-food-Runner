@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
-
+/**
+ * Create bitmap of healthy food, scale it and change position
+ */
 class HealthyFood {
     static int y = Game.getScreenHeight() / 2 + 220;
     public int x;
@@ -15,10 +17,8 @@ class HealthyFood {
     int height;
     Bitmap healthyFood;
     Rect healthyFoodRectangle;
-    private int speed = 15;
 
     HealthyFood(Resources resources, int level) {
-
         int[] healthyFoodList = new int[2];
         healthyFoodList[0] = R.drawable.orange;
         healthyFoodList[1] = R.drawable.tomato;
@@ -27,22 +27,17 @@ class HealthyFood {
         width = Game.getScreenWidth() / 8;
         height = Game.getScreenHeight() / 7;
         healthyFood = Bitmap.createScaledBitmap(healthyFood, width, height, false);
-
-
     }
 
-    public void changeSpeed(int randomSpeed) {
-        speed = randomSpeed;
+    public void changePosition() {
+        x -= 15;
     }
 
-    public void healthyFoodChange() {
-
-        x -= speed;
-    }
-
+    /**
+     * Method updates position of rectangle which is around healthy food bitmap. Based on these coordinates program knows about collisions.
+     */
     public void updateRectPosition() {
         healthyFoodRectangle = new Rect(x, y - height, x + width, y);
-
     }
 
 }

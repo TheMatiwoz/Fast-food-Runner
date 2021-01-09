@@ -5,17 +5,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
+/**
+ * Keeps all information about runner character, and about its actions in the game
+ */
 class Runner {
 
-    private final float UPVELOCITY = 45;  // Manipulate to change height
+    private final float UPVELOCITY = 45;  // Manipulate to change jump height
     public Bitmap[] runner;
     public int xPosition;
     public int yPosition;
     public int frameNum = 0;
     public Rect runnerRectangle;
-    private boolean isGoingUp = false;
+    public boolean isGoingUp = false;
     public int clickCounter = 0;
-    private final int YPOS;
+    private final int YPOS; // const value with initial Y position of runner
     private final int width;
     private final int height;
     private float downVelocity = 0, upVelocity = UPVELOCITY;
@@ -43,7 +46,7 @@ class Runner {
             runner[i] = Bitmap.createScaledBitmap(runner[i], width, height, false);
         }
 
-        xPosition = (int) ((Game.getScreenWidth() / 10) / Game.scrRatioX);
+        xPosition = (Game.getScreenWidth() / 10);
         if (level == 0) {
 
             YPOS = (Game.getScreenHeight() / 2) + 100;
@@ -55,17 +58,20 @@ class Runner {
 
     }
 
+    /**
+     * Responsible for jump action and simulate gravity
+     */
     public void jump() {
 
         if (yPosition >= YPOS) {
             clickCounter = 0;
         }
+
         if (!isGoingUp) {
             float gravityDown = 1.4f;
             downVelocity += gravityDown;
             yPosition += downVelocity;
         }
-
 
         if (yPosition > YPOS) {
             yPosition = YPOS;
@@ -79,19 +85,25 @@ class Runner {
             yPosition -= upVelocity;
 
         }
+
         if (upVelocity <= 0) {
             isGoingUp = false;
             upVelocity = UPVELOCITY;
         }
     }
 
+    /**
+     * Method updates position of rectangle which is around runner bitmap. Based on these coordinates program knows about collisions.
+     */
     public void updateRectPosition() {
 
         runnerRectangle = new Rect(xPosition, yPosition - height, xPosition + width, yPosition);
     }
 
+    /**
+     * Slows down the frame rate, the subject does not change too quickly
+     */
     public void delayMove() {
-        // Change runner frame method
         if (delayRunnerMove < 5) {
             delayRunnerMove++;
         } else {

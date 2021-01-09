@@ -3,13 +3,16 @@ package com.example.fastfoodrunner;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * Keeps variable with current game points and has fields to keep high scores on each level
+ */
 class HighScore {
-    int gamePoints = 0;
-    int x = Game.getScreenWidth() - 250;
-    int y = 100;
     private final SharedPreferences KFCPrefs;
     private final SharedPreferences MCPrefs;
     private final int level;
+    int gamePoints = 0;
+    int x = Game.getScreenWidth() - 250;
+    int y = 100;
 
     public HighScore(GameActivity activity, int level) {
         this.level = level;

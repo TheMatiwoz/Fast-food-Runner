@@ -4,6 +4,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+/**
+ * Create bitmap of heart, scale this bitmap and has field with heart coordinates
+ */
 class Hearts {
     public final int width;
     public final int height;

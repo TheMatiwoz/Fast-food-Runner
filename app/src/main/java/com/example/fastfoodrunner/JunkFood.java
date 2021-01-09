@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
+/**
+ * Class JunkFood create bitmap of junk food, scale it and change position
+ */
 class JunkFood {
     public int x;
     public boolean isCollision = false;
@@ -41,6 +44,9 @@ class JunkFood {
 
     }
 
+    /**
+     * Method updates position of rectangle which is around junk food bitmap. Based on these coordinates program knows about collisions.
+     */
     public void updateRectPosition() {
         rectangle = new Rect(x, y - height, x + width, y);
 

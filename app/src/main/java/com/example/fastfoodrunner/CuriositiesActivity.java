@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,12 +13,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Responsible for showing dietary curiosities before game is started
+ */
 public class CuriositiesActivity extends Activity {
 
     private final ArrayList<String> curiosities = new ArrayList<>();
     Random rand = new Random();
 
-    public void gra(View view){
+    public void gra(View view) {
 
         Intent intent = new Intent(CuriositiesActivity.this, GameActivity.class);
         intent.putExtra("Level", getIntent().getIntExtra("Level", 0));
@@ -44,14 +48,11 @@ public class CuriositiesActivity extends Activity {
             try {
 
                 if ((curiosity = reader.readLine()) == null) break;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             curiosities.add(curiosity);
         }
-
-
 
         TextView curiosityText = findViewById(R.id.curiosities);
         int text = rand.nextInt(curiosities.size());
